@@ -20,6 +20,8 @@ Here is the ExploredGraph.java starter code file. The starter code includes basi
 Vertex v0 = new Vertex( "[[4,3,2,1],[],[]]" );
 All of your code will be added in this file. To help you find places where you should add code, there are several "// Implement this" comments. In addition to the code you add, provide line-by-line comments in your code and per-method comments for those methods that you implement. These per-method comments will normally be about one to three lines of text, as needed to describe the purpose of the method. The comments do not have to be in JavaDoc format. In these per-method comments, you should say what the input arguments represent and what the return value represents.
 
+![alt text](https://courses.cs.washington.edu/courses/cse373/16au/A/A5/TOHGraph4.png "Logo Title Text 1")
+
 ##Basic Code Specification
 
 ###Vertex
@@ -27,7 +29,8 @@ Vertex: a class to represent vertices of the graph. Since each vertex represents
 
 ###Edge
 Edge: a class to represent edges of the graph. Provide a constructor, a toString method, and methods to retrieve endpoint1 and endpoint2 of the edge (call them getEndpoint1() and getEndpoint2()). If you do the extra credit A6E2, also provide methods setEdgeCost(int c) and getEdgeCost().
-Note: The toString method should use the following format: "Edge from [[4,3,2,1],[],[]] to [[4,3,2],[1],[]]". Notice that although we sometimes consider edges of these graphs to be undirected, we will consider our edges here to actually be directed. Thus, there may be an edge in our graph whose string representation is "Edge from [[4,3,2],[1],[]] to [[4,3,2,1],[],[]]", but we will consider these to be distinct.
+
+>Note: The toString method should use the following format: "Edge from [[4,3,2,1],[],[]] to [[4,3,2],[1],[]]". Notice that although we sometimes consider edges of these graphs to be undirected, we will consider our edges here to actually be directed. Thus, there may be an edge in our graph whose string representation is "Edge from [[4,3,2],[1],[]] to [[4,3,2,1],[],[]]", but we will consider these to be distinct.
 
 ###Operator
 Operator: a class to represent operators for the problem. There should be methods to construct operators, access their components, and apply their components. getPrecondition() should return a function that can be applied to a vertex to find out whether the operator's transition function is applicable to the vertex. getTransition() should return a function that can be applied to a vertex (provided that the precondition is true) to get a "successor" vertex -- the result of making the move. and use them. precondition(Vertex v) should return true if the vertex v satisfies the precondition for the operators (and so it would be OK to apply the operator's transition method. In the Towers of Hanoi, this means that it would possible and legal to move a disk from peg i to peg j). transition(Vertex v) should return a new vertex that represents the state reached by applying the operator. Thus it should actually make the move of a disk from peg i to peg j. It is important that the vertex returned be a new instance of class Vertex, and not just v with modifications. toString() should return a string that describes this operator, clearly differentiating it from the others.
