@@ -11,6 +11,35 @@ Typical tasks associated with problem-space graphs are (a) solving the problem, 
 
 The basic functionality that you'll provide in this assignment will handle the finding of shortest paths, using breadth-first search (BFS). This can be used, in principle, to solve problems as well. In addition to breadth-first search, you'll implement one or more additional algorithms that will serve to compare BFS to alternatives.
 
+```java
+public void bfs(Vertex vi, Vertex vj) {
+    initialize();
+    Queue<Vertex> q = new LinkedList<Vertex>();
+    q.add(vi);
+    outerloop:
+    while (!q.isEmpty()) {
+        Vertex currVertex = q.remove();
+        if (!Ve.contains(currVertex)) {
+            Ve.add(currVertex);
+        }
+        Vertex futureVertex;
+        for (Operator op : Op) {
+            if (op.precondition(currVertex)) {
+                futureVertex = op.transition(currVertex);
+                if (!q.contains(futureVertex) && !Ve.contains(futureVertex)) {
+                    q.add(futureVertex);
+                    Ee.add(new Edge(currVertex, futureVertex));
+                    if (vj.equals(futureVertex)) {
+                        Ve.add(futureVertex);
+                        break outerloop;
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
 We'll work with a problem space based on a popular puzzle, but we won't stop there. We'll consider a couple of "extensions" to the puzzle that will make this assignment not just an exercise but also more of an exploration in its own right. The puzzle is really a family of puzzles. Known as the Towers of Hanoi, it involves three pegs and a set of disks of different sizes. The player (solver) of the puzzle starts with all the disks on the first peg, the disks being arranged with the largest-diameter one at the bottom and sizes decreasing going up the stack. The objective is to move all the disks to the third peg, respecting the following constraints: only one disk may be moved at a time. Only a disk that is topmost in its stack of disks may be moved. It must then be moved either to a peg containing no disks or to a peg where the topmost disk is of a larger diameter than its own. The reason this is a family of puzzles rather than a single one is because the number of disks involved is a parameter to the initialization of the puzzle. For example, an instance of the puzzle with 5 disks is a little more difficult to solve than one with only 4 disks. An instance having 100 disks, while solvable in theory, is impossible in practice, assuming it takes at least one femtosecond to make a move.
 
 Our graph is defined implicitly as follows. The starting vertex v0 represents the initial state of the puzzle. We have six operators: `{ ϕ0,1, ϕ0,2, ϕ1,0, ϕ1,2, ϕ2,0, ϕ2,1}`. Here, operator ϕi,j could be interpreted as "Try to move a disk from peg i to peg j." We are using 0-based indexing for the pegs so peg 0 is the first peg, etc.
@@ -37,3 +66,30 @@ Operator: a class to represent operators for the problem. There should be method
 
 ###ExploredGraph
 ExploredGraph: a class that holds a collection of vertices and a collection of edges. It will be used to store the portion of the problem-space graph that has been made explicit by the program so far. It should have the following methods. initialize(v) should set up an instance of this class, and insert the starting vertex v into its set of vertices. Typically, v will be the start vertex, but your method should allow any legal vertex for the problem-space graph. [Optional alternative added Nov. 24 for consistency with starter code: initialize(), which should set to empty the explored graph's sets of vertices and edges. The autograding software will accept either of these signatures.] nvertices() should return an int giving the number of vertices currently in the explored graph structure. nedges() should return an int giving the number of edges currently in the explored graph structure. bfs(vi, vj) should run a breadth-first search starting at vi and continue until reaching vj. idfs(vi, vj) should run an iterative depth-first search starting at vi and stopping either when reaching vj or running out of options or resources. (The algorithm for iterative depth-first search that you should use is given in pseudocode on the section-meeting worksheet of Nov. 10, entitled "Graph Search in the Towers of Hanoi Problem Space Graph.") retrievePath(vj) should use the path links established by the most recent call to bfs or other search method, and it should return the path to vj. The path should end at vj, and that might require reversing the list of vertices obtained by the backtrace. shortestPath(vi, vj) should use bfs and return a list of vertices that starts with vi and ends with vj representing a shortest path in the problem-space graph from vi to vj. This can be implemented using a combination of bfs and retrievePath.
+```java
+public void idfs(Vertex vi, Vertex vj) {
+    initialize();
+    Stack<Vertex> s = new Stack<Vertex>();
+    s.push(vi);
+    outerloop:
+    while (!s.isEmpty()) {
+        Vertex currVertex = s.pop();
+        Ve.add(currVertex);
+        System.out.println(currVertex);
+        for (Operator op : Op) {
+            if (op.precondition(currVertex)) {
+                Vertex foundVertex = op.transition(currVertex);
+                if (!Ve.contains(foundVertex)) {
+                    s.push(foundVertex);
+                    Ve.add(foundVertex);
+                    Ee.add(new Edge(currVertex, foundVertex));
+                    if (foundVertex.equals(vj)) {
+                        System.out.println(foundVertex);
+                        break outerloop;
+                    }
+                }
+            }
+        }
+    }
+}
+```
