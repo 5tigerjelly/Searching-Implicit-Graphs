@@ -83,7 +83,7 @@ public Vertex transition(Vertex v) {
 ```
 
 ###ExploredGraph
-ExploredGraph: a class that holds a collection of vertices and a collection of edges. It will be used to store the portion of the problem-space graph that has been made explicit by the program so far. It should have the following methods. initialize(v) should set up an instance of this class, and insert the starting vertex v into its set of vertices. Typically, v will be the start vertex, but your method should allow any legal vertex for the problem-space graph. [Optional alternative added Nov. 24 for consistency with starter code: initialize(), which should set to empty the explored graph's sets of vertices and edges. The autograding software will accept either of these signatures.] nvertices() should return an int giving the number of vertices currently in the explored graph structure. nedges() should return an int giving the number of edges currently in the explored graph structure. bfs(vi, vj) should run a breadth-first search starting at vi and continue until reaching vj. idfs(vi, vj) should run an iterative depth-first search starting at vi and stopping either when reaching vj or running out of options or resources. (The algorithm for iterative depth-first search that you should use is given in pseudocode on the section-meeting worksheet of Nov. 10, entitled "Graph Search in the Towers of Hanoi Problem Space Graph.") retrievePath(vj) should use the path links established by the most recent call to bfs or other search method, and it should return the path to vj. The path should end at vj, and that might require reversing the list of vertices obtained by the backtrace. shortestPath(vi, vj) should use bfs and return a list of vertices that starts with vi and ends with vj representing a shortest path in the problem-space graph from vi to vj. This can be implemented using a combination of bfs and retrievePath.
+ExploredGraph: a class that holds a collection of vertices and a collection of edges. It will be used to store the portion of the problem-space graph that has been made explicit by the program so far. It should have the following methods. initialize(v) should set up an instance of this class, and insert the starting vertex v into its set of vertices. Typically, v will be the start vertex, but your method should allow any legal vertex for the problem-space graph. [Optional alternative added Nov. 24 for consistency with starter code: initialize(), which should set to empty the explored graph's sets of vertices and edges. The autograding software will accept either of these signatures.] nvertices() should return an int giving the number of vertices currently in the explored graph structure. nedges() should return an int giving the number of edges currently in the explored graph structure. bfs(vi, vj) should run a breadth-first search starting at vi and continue until reaching vj. idfs(vi, vj) should run an iterative depth-first search starting at vi and stopping either when reaching vj or running out of options or resources.
 ```java
 public void idfs(Vertex vi, Vertex vj) {
     initialize();
@@ -111,3 +111,35 @@ public void idfs(Vertex vi, Vertex vj) {
     }
 }
 ```
+retrievePath(vj) should use the path links established by the most recent call to bfs or other search method, and it should return the path to vj. The path should end at vj, and that might require reversing the list of vertices obtained by the backtrace. 
+```java
+public ArrayList<Vertex> retrievePath(Vertex vj) {
+    ArrayList<Vertex> backtrace = new ArrayList<Vertex>();
+    Vertex currVertex = vj;
+    backtrace.add(vj);
+    while (true) {
+        boolean found = false;
+        for(Edge e : Ee){
+            if(e.getEndpoint2().equals(currVertex)){
+                backtrace.add(e.vi);
+                currVertex = e.vi;
+                found = true;
+                break;
+            }
+        }
+        if (!found){
+            break;
+        }
+    }
+    Collections.reverse(backtrace);
+    return backtrace;
+}
+```
+shortestPath(vi, vj) should use bfs and return a list of vertices that starts with vi and ends with vj representing a shortest path in the problem-space graph from vi to vj. This can be implemented using a combination of bfs and retrievePath.
+```java
+public ArrayList<Vertex> shortestPath(Vertex vi, Vertex vj) {
+    bfs(vi, vj);
+    return retrievePath(vj);
+}
+```
+
