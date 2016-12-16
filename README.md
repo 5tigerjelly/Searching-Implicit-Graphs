@@ -62,7 +62,25 @@ Edge: a class to represent edges of the graph. Provide a constructor, a toString
 >Note: The toString method should use the following format: "Edge from `[[4,3,2,1],[],[]]` to `[[4,3,2],[1],[]]`". Notice that although we sometimes consider edges of these graphs to be undirected, we will consider our edges here to actually be directed. Thus, there may be an edge in our graph whose string representation is "Edge from `[[4,3,2],[1],[]]` to `[[4,3,2,1],[],[]]`", but we will consider these to be distinct.
 
 ###Operator
-Operator: a class to represent operators for the problem. There should be methods to construct operators, access their components, and apply their components. getPrecondition() should return a function that can be applied to a vertex to find out whether the operator's transition function is applicable to the vertex. getTransition() should return a function that can be applied to a vertex (provided that the precondition is true) to get a "successor" vertex -- the result of making the move. and use them. precondition(Vertex v) should return true if the vertex v satisfies the precondition for the operators (and so it would be OK to apply the operator's transition method. In the Towers of Hanoi, this means that it would possible and legal to move a disk from peg i to peg j). transition(Vertex v) should return a new vertex that represents the state reached by applying the operator. Thus it should actually make the move of a disk from peg i to peg j. It is important that the vertex returned be a new instance of class Vertex, and not just v with modifications. toString() should return a string that describes this operator, clearly differentiating it from the others.
+Operator: a class to represent operators for the problem. There should be methods to construct operators, access their components, and apply their components. getPrecondition() should return a function that can be applied to a vertex to find out whether the operator's transition function is applicable to the vertex. getTransition() should return a function that can be applied to a vertex (provided that the precondition is true) to get a "successor" vertex -- the result of making the move. and use them. precondition(Vertex v) should return true if the vertex v satisfies the precondition for the operators (and so it would be OK to apply the operator's transition method. 
+```java
+public boolean precondition(Vertex v) {
+    if (!v.pegs.get(i).isEmpty()) {
+        if (v.pegs.get(j).isEmpty() || v.pegs.get(i).peek() < v.pegs.get(j).peek()) {
+            return true;
+        }
+    }
+    return false;
+}
+```
+In the Towers of Hanoi, this means that it would possible and legal to move a disk from peg i to peg j). transition(Vertex v) should return a new vertex that represents the state reached by applying the operator. Thus it should actually make the move of a disk from peg i to peg j. It is important that the vertex returned be a new instance of class Vertex, and not just v with modifications. toString() should return a string that describes this operator, clearly differentiating it from the others.
+```java
+public Vertex transition(Vertex v) {
+    Vertex returnVertex = new Vertex(v.toString());
+    returnVertex.pegs.get(j).push(returnVertex.pegs.get(i).pop());
+    return returnVertex;
+}
+```
 
 ###ExploredGraph
 ExploredGraph: a class that holds a collection of vertices and a collection of edges. It will be used to store the portion of the problem-space graph that has been made explicit by the program so far. It should have the following methods. initialize(v) should set up an instance of this class, and insert the starting vertex v into its set of vertices. Typically, v will be the start vertex, but your method should allow any legal vertex for the problem-space graph. [Optional alternative added Nov. 24 for consistency with starter code: initialize(), which should set to empty the explored graph's sets of vertices and edges. The autograding software will accept either of these signatures.] nvertices() should return an int giving the number of vertices currently in the explored graph structure. nedges() should return an int giving the number of edges currently in the explored graph structure. bfs(vi, vj) should run a breadth-first search starting at vi and continue until reaching vj. idfs(vi, vj) should run an iterative depth-first search starting at vi and stopping either when reaching vj or running out of options or resources. (The algorithm for iterative depth-first search that you should use is given in pseudocode on the section-meeting worksheet of Nov. 10, entitled "Graph Search in the Towers of Hanoi Problem Space Graph.") retrievePath(vj) should use the path links established by the most recent call to bfs or other search method, and it should return the path to vj. The path should end at vj, and that might require reversing the list of vertices obtained by the backtrace. shortestPath(vi, vj) should use bfs and return a list of vertices that starts with vi and ends with vj representing a shortest path in the problem-space graph from vi to vj. This can be implemented using a combination of bfs and retrievePath.
