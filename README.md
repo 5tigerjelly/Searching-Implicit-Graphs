@@ -1,5 +1,5 @@
 # Searching Implicit Graphs
-##Overview
+## Overview
 
 Graphs are often presented explicitly in courses on data structures and algorithms. For example, the undirected graph `G = (V, E)`, where `V = {v0, v1, v2}` and `E = {(v0, v1), (v1, v2)}` is presented with an expression that gives each vertex and edge its own representation. In real applications, it is often the case that a graph is presented only implicitly; its vertices and edges have to be constructed by code as an algorithm runs. In this assignment, you'll work with one family of such implicit graphs.
 
@@ -51,17 +51,17 @@ All of your code will be added in this file. To help you find places where you s
 
 ![alt text](https://courses.cs.washington.edu/courses/cse373/16au/A/A5/TOHGraph4.png "Logo Title Text 1")
 
-##Basic Code Specification
+## Basic Code Specification
 
-###Vertex
+### Vertex
 Vertex: a class to represent vertices of the graph. Since each vertex represents a state of a Towers-of-Hanoi puzzle, it must contain the basic information about which disk is on which peg. It should have a toString() method that returns a string of the form "`[[4,3,2,1],[],[]]`". The starter code includes one constructor and the toString method.
 
-###Edge
+### Edge
 Edge: a class to represent edges of the graph. Provide a constructor, a toString method, and methods to retrieve endpoint1 and endpoint2 of the edge (call them getEndpoint1() and getEndpoint2()). If you do the extra credit A6E2, also provide methods setEdgeCost(int c) and getEdgeCost().
 
 >Note: The toString method should use the following format: "Edge from `[[4,3,2,1],[],[]]` to `[[4,3,2],[1],[]]`". Notice that although we sometimes consider edges of these graphs to be undirected, we will consider our edges here to actually be directed. Thus, there may be an edge in our graph whose string representation is "Edge from `[[4,3,2],[1],[]]` to `[[4,3,2,1],[],[]]`", but we will consider these to be distinct.
 
-###Operator
+### Operator
 Operator: a class to represent operators for the problem. There should be methods to construct operators, access their components, and apply their components. **getPrecondition()** should return a function that can be applied to a vertex to find out whether the operator's transition function is applicable to the vertex. getTransition() should return a function that can be applied to a vertex (provided that the precondition is true) to get a "successor" vertex -- the result of making the move. and use them. precondition(Vertex v) should return true if the vertex v satisfies the precondition for the operators (and so it would be OK to apply the operator's transition method. 
 ```java
 public boolean precondition(Vertex v) {
@@ -90,7 +90,7 @@ public String toString() {
 }
 ```
 
-###ExploredGraph
+### ExploredGraph
 ExploredGraph: a class that holds a collection of vertices and a collection of edges. It will be used to store the portion of the problem-space graph that has been made explicit by the program so far. It should have the following methods. initialize(v) should set up an instance of this class, and insert the starting vertex v into its set of vertices. Typically, v will be the start vertex, but your method should allow any legal vertex for the problem-space graph. **nvertices()** should return an int giving the number of vertices currently in the explored graph structure. nedges() should return an int giving the number of edges currently in the explored graph structure. **bfs(vi, vj)** should run a breadth-first search starting at vi and continue until reaching vj. **idfs(vi, vj)** should run an iterative depth-first search starting at vi and stopping either when reaching vj or running out of options or resources.
 ```java
 public void idfs(Vertex vi, Vertex vj) {
